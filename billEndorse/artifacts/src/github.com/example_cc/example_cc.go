@@ -22,6 +22,7 @@ import (
 	"strconv"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"encoding/json"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
@@ -191,8 +192,15 @@ func (t *SimpleChaincode) query(stub shim.ChaincodeStubInterface, args []string)
 	}
 
 	jsonResp := "{\"Name\":\"" + A + "\",\"Amount\":\"" + string(Avalbytes) + "\"}"
+	re,err := json.Marshal(jsonResp)
+	// if err!=nil {
+	// 	fmt.Println("marshal Ret failed")
+	// 	res := getRetString(1,"ChainnovaChaincode queryMyWaitBill get bill error")
+		
+    //     return shim.Error(res)
+    // }
 	logger.Infof("Query Response:%s\n", jsonResp)
-	return shim.Success(Avalbytes)
+	return shim.Success(re)
 }
 
 func main() {
@@ -201,3 +209,19 @@ func main() {
 		logger.Errorf("Error starting Simple chaincode: %s", err)
 	}
 }
+
+// // response message format
+// func getRetString(code int,des string) string {
+//     var r chaincodeRet
+//     r.Code = code
+//     r.Des = des
+
+//     b,err := json.Marshal(r)
+
+//     if err!=nil {
+//         fmt.Println("marshal Ret failed")
+//         return ""
+//     }
+// 	chaincodeLogger.Infof("%s",string(b[:]))
+//     return string(b[:])
+// }

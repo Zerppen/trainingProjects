@@ -82,7 +82,7 @@ curl -s -X POST \
   -d '{
 	"peers": ["peer1", "peer2"],
 	"chaincodeName":"mycc",
-	"chaincodePath":"github.com/training",
+	"chaincodePath":"github.com/example_cc",
 	"chaincodeVersion":"v0"
 }'
 echo
