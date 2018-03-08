@@ -267,6 +267,26 @@ function buildTarget(peer, org) {
 	return target;
 }
 
+var getChannelHeight=function(peer,channelName,username,org){
+	return getChainInfo(peer,channelName,username,org).then(response=>{
+		if(response){
+			logger.debug('<<<<<<<<<< channel height >>>>>>>>>')
+			logger.debug(response.height.low)
+			return response.height.low.toString();
+		}
+	})
+}
+var getPeerList = function(org,channelName){
+	var client = helper.getClientForOrg(org);		
+	var channel = helper.getChannelForOrg(org,channelName);
+	return channel.getPeers();	
+};
+
+var getOrganizations = function(org,channelName){
+	var channel = helper.getChannelForOrg(org,channelName);
+	return channel.getOrganizations();		
+};
+
 exports.queryChaincode = queryChaincode;
 exports.getBlockByNumber = getBlockByNumber;
 exports.getTransactionByID = getTransactionByID;
@@ -274,3 +294,8 @@ exports.getBlockByHash = getBlockByHash;
 exports.getChainInfo = getChainInfo;
 exports.getInstalledChaincodes = getInstalledChaincodes;
 exports.getChannels = getChannels;
+exports.getChannelHeight = getChannelHeight;
+exports.getPeerList = getPeerList;
+exports.getOrganizations=getOrganizations;
+
+

@@ -587,3 +587,35 @@ app.get('/channels', function(req, res) {
 		res.send(message);
 	});
 });
+
+// Query to get channel's height
+app.get('/channel/:channelName/height',function(req,res){
+	logger.debug('===============GET CHANNEL HEIGHT ================');
+	let peer = req.query.peer;
+	query.getChannelHeight(peer,channelName,req.username,req.orgname).then(
+		function(message){
+			res.send(message);
+		});
+
+});
+
+//Query al peers of the channel
+app.get('/channel/:channelName/getPeers',function(req,res){
+	logger.debug('============== GET CHANNEL PEERS ==================');
+	query.getPeerList(req.orgname,channelName).then(
+		function(message){
+			res.send(message);
+		}
+	);
+
+});
+
+//Query all orgs of the channel
+app.get('/channel/:channelName/getOrgs',function(req,res){
+	logger.debug('============= GET CHANNEL ORGS =================');
+	query.getOrganizations(req.orgname,channelName).then(
+		function(message){
+			res.send(message);
+		}
+	)
+});
