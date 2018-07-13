@@ -31,7 +31,7 @@ function restartNetwork() {
 	echo
 
         #teardown the network and clean the containers and intermediate images
-	cd artifacts
+	cd  yhartifacts
 	docker-compose down
 	dkcl
 	dkrm

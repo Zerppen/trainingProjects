@@ -1,0 +1,307 @@
+#
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+version: '2'
+
+services:
+
+  ca.jywy.trace.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.jywy.trace.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/9905793c2b40ef2b0cee7ec3d8972d8a90a75fe367039d849561b52e9b279245_sk
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.jywy.trace.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/9905793c2b40ef2b0cee7ec3d8972d8a90a75fe367039d849561b52e9b279245_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./channel/crypto-config/peerOrganizations/jywy.trace.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerJYWY
+
+  ca.yh.trace.cn:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.yh.trace.cn-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/79c48c8cbdcfb4b6a6ab6d574984bdacb9e521a73981c3dc7101e05fbae9e717_sk
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.yh.trace.cn-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/79c48c8cbdcfb4b6a6ab6d574984bdacb9e521a73981c3dc7101e05fbae9e717_sk
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./channel/crypto-config/peerOrganizations/yh.trace.cn/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerYH
+
+  ca.zfjg.gov.cn:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.zfjg.gov.cn-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/ce28ea3e808e43ca87229b6d1931ee6f4f6bbe383752ed5ce4341355a5426fcd_sk
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.zfjg.gov.cn-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/ce28ea3e808e43ca87229b6d1931ee6f4f6bbe383752ed5ce4341355a5426fcd_sk
+    ports:
+      - "9054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./channel/crypto-config/peerOrganizations/zfjg.gov.cn/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerZFJG 
+  
+  zookeeper0:
+    container_name: zookeeper0
+    extends:
+      file: base/docker-compose-base.yaml
+      service: zookeeper
+    environment:
+      - ZOO_MY_ID=1
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+
+  zookeeper1:
+    container_name: zookeeper1
+    extends:
+      file: base/docker-compose-base.yaml
+      service: zookeeper
+    environment:
+      - ZOO_MY_ID=2
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+
+  zookeeper2:
+    container_name: zookeeper2
+    extends:
+      file: base/docker-compose-base.yaml
+      service: zookeeper
+    environment:
+      - ZOO_MY_ID=3
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+   
+  kafka0:
+    container_name: kafka0
+    extends:
+      file: base/docker-compose-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=0
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+
+  kafka1:
+    container_name: kafka1
+    extends:
+      file: base/docker-compose-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+     
+  kafka2:
+    container_name: kafka2
+    extends:
+      file: base/docker-compose-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+
+  kafka3:
+    container_name: kafka3
+    extends:
+      file: base/docker-compose-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+
+  orderer.example.com:
+    container_name: orderer.example.com
+    image: hyperledger/fabric-orderer
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/crypto/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/etc/hyperledger/crypto/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/etc/hyperledger/crypto/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/etc/hyperledger/crypto/orderer/tls/ca.crt, /etc/hyperledger/crypto/peerJYWY/tls/ca.crt, /etc/hyperledger/crypto/peerYH/tls/ca.crt, /etc/hyperledger/crypto/peerZFJG/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderers
+    command: orderer
+    ports:
+      - 7050:7050
+    depends_on:
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    volumes:
+        - ./channel:/etc/hyperledger/configtx
+        - ./channel/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/crypto/orderer
+        - ./channel/crypto-config/peerOrganizations/jywy.trace.com/peers/peer0.jywy.trace.com/:/etc/hyperledger/crypto/peerJYWY
+        - ./channel/crypto-config/peerOrganizations/yh.trace.cn/peers/peer0.yh.trace.cn/:/etc/hyperledger/crypto/peerYH
+        - ./channel/crypto-config/peerOrganizations/zfjg.gov.cn/peers/peer0.zfjg.gov.cn/:/etc/hyperledger/crypto/peerZFJG
+ 
+  peer0.jywy.trace.com:
+    container_name: peer0.jywy.trace.com
+    extends:
+      file:   base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.jywy.trace.com
+      - CORE_PEER_LOCALMSPID=JYWYMSP
+      - CORE_PEER_ADDRESS=peer0.jywy.trace.com:7051
+    ports:
+      - 7051:7051
+      - 7053:7053
+    volumes:
+        - ./channel/crypto-config/peerOrganizations/jywy.trace.com/peers/peer0.jywy.trace.com/:/etc/hyperledger/crypto/peer
+    depends_on:
+      - orderer.example.com
+
+  peer1.jywy.trace.com:
+    container_name: peer1.jywy.trace.com
+    extends:
+      file:   base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.jywy.trace.com
+      - CORE_PEER_LOCALMSPID=JYWYMSP
+      - CORE_PEER_ADDRESS=peer1.jywy.trace.com:7051
+    ports:
+      - 7056:7051
+      - 7058:7053
+    volumes:
+        - ./channel/crypto-config/peerOrganizations/jywy.trace.com/peers/peer1.jywy.trace.com/:/etc/hyperledger/crypto/peer
+    depends_on:
+      - orderer.example.com
+
+  peer0.yh.trace.cn:
+    container_name: peer0.yh.trace.cn
+    extends:
+      file:   base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.yh.trace.cn
+      - CORE_PEER_LOCALMSPID=YHMSP
+      - CORE_PEER_ADDRESS=peer0.yh.trace.cn:7051
+    ports:
+      - 8051:7051
+      - 8053:7053
+    volumes:
+        - ./channel/crypto-config/peerOrganizations/yh.trace.cn/peers/peer0.yh.trace.cn/:/etc/hyperledger/crypto/peer
+    depends_on:
+      - orderer.example.com
+
+  peer1.yh.trace.cn:
+    container_name: peer1.yh.trace.cn
+    extends:
+      file:   base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.yh.trace.cn
+      - CORE_PEER_LOCALMSPID=YHMSP
+      - CORE_PEER_ADDRESS=peer1.yh.trace.cn:7051
+    ports:
+      - 8056:7051
+      - 8058:7053
+    volumes:
+        - ./channel/crypto-config/peerOrganizations/yh.trace.cn/peers/peer1.yh.trace.cn/:/etc/hyperledger/crypto/peer
+    depends_on:
+      - orderer.example.com
+
+  peer0.zfjg.gov.cn:
+    container_name: peer0.zfjg.gov.cn
+    extends:
+      file:   base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.zfjg.gov.cn
+      - CORE_PEER_LOCALMSPID=ZFJGMSP
+      - CORE_PEER_ADDRESS=peer0.zfjg.gov.cn:7051
+    ports:
+      - 9051:7051
+      - 9053:7053
+    volumes:
+        - ./channel/crypto-config/peerOrganizations/zfjg.gov.cn/peers/peer0.zfjg.gov.cn/:/etc/hyperledger/crypto/peer
+    depends_on:
+      - orderer.example.com
+
+  peer1.zfjg.gov.cn:
+    container_name: peer1.zfjg.gov.cn
+    extends:
+      file:   base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.zfjg.gov.cn
+      - CORE_PEER_LOCALMSPID=ZFJGMSP
+      - CORE_PEER_ADDRESS=peer1.zfjg.gov.cn:7051
+    ports:
+      - 9056:7051
+      - 9058:7053
+    volumes:
+        - ./channel/crypto-config/peerOrganizations/zfjg.gov.cn/peers/peer1.zfjg.gov.cn/:/etc/hyperledger/crypto/peer
+    depends_on:
+      - orderer.example.com
+
+
+  cli:
+      container_name: cli
+      image: hyperledger/fabric-tools
+      tty: true
+      environment:
+        - GOPATH=/opt/gopath
+        - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+        - CORE_LOGGING_LEVEL=DEBUG
+        - CORE_PEER_ID=cli
+        - CORE_PEER_ADDRESS=peer0.yh.trace.cn:7051
+        - CORE_PEER_LOCALMSPID=YHMSP
+        - CORE_PEER_TLS_ENABLED=true
+        - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/yh.trace.cn/peers/peer0.yh.trace.cn/tls/server.crt
+        - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/yh.trace.cn/peers/peer0.yh.trace.cn/tls/server.key
+        - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/yh.trace.cn/peers/peer0.yh.trace.cn/tls/ca.crt
+        - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/yh.trace.cn/users/Admin@yh.trace.cn/msp
+      working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+      command: /bin/bash
+      volumes:
+          - /var/run/:/host/var/run/
+          - ./src/github.com/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+          - ./channel/crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+      depends_on:
+        - orderer.example.com
+        - peer0.yh.trace.cn
+        - peer1.yh.trace.cn
+        - peer0.jywy.trace.com
+        - peer1.jywy.trace.com
+        - peer0.zfjg.gov.cn
+        - peer1.zfjg.gov.cn
