@@ -2,8 +2,8 @@
    "host":"localhost",
    "port":"4000",
    "jwt_expiretime": "36000",
-   "channelName":"mychannel",
-   "CC_SRC_PATH":"../artifacts",
+   "channelName":"yhchannel",
+   "CC_SRC_PATH":"../yhartifacts",
    "keyValueStore":"/tmp/fabric-client-kvs",
    "eventWaitTime":"30000",
    "admins":[

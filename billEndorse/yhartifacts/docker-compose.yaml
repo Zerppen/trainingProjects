@@ -11,11 +11,12 @@ services:
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-jywy
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.jywy.trace.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/9905793c2b40ef2b0cee7ec3d8972d8a90a75fe367039d849561b52e9b279245_sk
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/24d4da374955f980311543f536296b3ddf1f2bd25504f26575cbd2f163ad383f_sk
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.jywy.trace.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/9905793c2b40ef2b0cee7ec3d8972d8a90a75fe367039d849561b52e9b279245_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/24d4da374955f980311543f536296b3ddf1f2bd25504f26575cbd2f163ad383f_sk
     ports:
       - "7054:7054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
@@ -27,11 +28,12 @@ services:
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-yh
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.yh.trace.cn-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/79c48c8cbdcfb4b6a6ab6d574984bdacb9e521a73981c3dc7101e05fbae9e717_sk
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/2a73638ff87990264a950726d46725f52bec2c8129745fa4f1ac5fdf83718173_sk
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.yh.trace.cn-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/79c48c8cbdcfb4b6a6ab6d574984bdacb9e521a73981c3dc7101e05fbae9e717_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/2a73638ff87990264a950726d46725f52bec2c8129745fa4f1ac5fdf83718173_sk
     ports:
       - "8054:7054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
@@ -43,11 +45,12 @@ services:
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-zfjg
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.zfjg.gov.cn-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/ce28ea3e808e43ca87229b6d1931ee6f4f6bbe383752ed5ce4341355a5426fcd_sk
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/4c5eb29064392de353b0d087d9d81c198120f295795ae12504c2c727aead3998_sk
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.zfjg.gov.cn-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/ce28ea3e808e43ca87229b6d1931ee6f4f6bbe383752ed5ce4341355a5426fcd_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/4c5eb29064392de353b0d087d9d81c198120f295795ae12504c2c727aead3998_sk
     ports:
       - "9054:7054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
@@ -295,8 +298,9 @@ services:
       command: /bin/bash
       volumes:
           - /var/run/:/host/var/run/
-          - ./src/github.com/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+          - ../src/github.com/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
           - ./channel/crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+          - ./channel:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
       depends_on:
         - orderer.example.com
         - peer0.yh.trace.cn

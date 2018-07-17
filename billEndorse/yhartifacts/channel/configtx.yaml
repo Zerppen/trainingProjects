@@ -30,16 +30,16 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-       # Policies:
-       #     Readers:
-       #         Type: Signature
-       #         Rule: "OR('OrdererMSP.member')"
-       #     Writers:
-       #         Type: Signature
-       #         Rule: "OR('OrdererMSP.member')"
-       #     Admins:
-       #         Type: Signature
-       #         Rule: "OR('OrdererMSP.admin')"
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrdererMSP.admin')"
 
     - &JYWY
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -54,16 +54,16 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-       # Policies:
-       #     Readers:
-       #         Type: Signature
-       #         Rule: "OR('JYWYMSP.admin', 'JYWYMSP.peer', 'JYWYMSP.client')" 
-       #     Writers:
-       #         Type: Signature
-       #         Rule: "OR('JYWYMSP.admin', 'JYWYMSP.client')"
-       #     Admins:
-       #         Type: Signature
-       #         Rule: "OR('JYWYMSP.admin')"
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Org1MSP.admin', 'Org1MSP.peer', 'Org1MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org1MSP.admin', 'Org1MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org1MSP.admin')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
@@ -85,17 +85,17 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-       # Policies:
-       #     Readers:
-       #         Type: Signature
-       #         Rule: "OR('YHMSP.admin', 'YHMSP.peer', 'YHMSP.client')"
-       #     Writers:
-       #         Type: Signature
-       #         Rule: "OR('YHMSP.admin', 'YHMSP.client')"
-       #     Admins:
-       #         Type: Signature
-       #         Rule: "OR('YHMSP.admin')" 
-         
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Org2MSP.admin', 'Org2MSP.peer', 'Org2MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org2MSP.admin', 'Org2MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org2MSP.admin')"
+
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
@@ -118,16 +118,16 @@ Organizations:
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-       # Policies:
-       #     Readers:
-       #         Type: Signature
-       #         Rule: "OR('ZFJGMSP.admin', 'ZFJGMSP.peer', 'ZFJGMSP.client')"
-       #     Writers:
-       #         Type: Signature
-       #         Rule: "OR('ZFJGMSP.admin', 'ZFJGMSP.client')"
-       #     Admins:
-       #         Type: Signature
-       #         Rule: "OR('ZFJGMSP.admin')"
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Org3MSP.admin', 'Org3MSP.peer', 'Org3MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org3MSP.admin', 'Org3MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org3MSP.admin')"
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
@@ -202,16 +202,16 @@ Application: &ApplicationDefaults
     # Policies defines the set of policies at this level of the config tree
     # For Application policies, their canonical path is
     #   /Channel/Application/<PolicyName>
-    #Policies:
-    #    Readers:
-    #        Type: ImplicitMeta
-    #        Rule: "ANY Readers"
-    #    Writers:
-    #        Type: ImplicitMeta
-    #        Rule: "ANY Writers"
-    #    Admins:
-    #        Type: ImplicitMeta
-    #        Rule: "MAJORITY Admins"
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
 
     # Capabilities describes the application level capabilities, see the
     # dedicated Capabilities section elsewhere in this file for a full
@@ -271,21 +271,21 @@ Orderer: &OrdererDefaults
     # Policies defines the set of policies at this level of the config tree
     # For Orderer policies, their canonical path is
     #   /Channel/Orderer/<PolicyName>
-   # Policies:
-   #     Readers:
-   #         Type: ImplicitMeta
-   #         Rule: "ANY Readers"
-   #     Writers:
-   #         Type: ImplicitMeta
-   #         Rule: "ANY Writers"
-   #     Admins:
-   #         Type: ImplicitMeta
-   #         Rule: "MAJORITY Admins"
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
         # BlockValidation specifies what signatures must be included in the block
         # from the orderer for the peer to validate it.
-   #     BlockValidation:
-   #         Type: ImplicitMeta
-   #         Rule: "ANY Writers"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
 
     # Capabilities describes the orderer level capabilities, see the
     # dedicated Capabilities section elsewhere in this file for a full
@@ -301,30 +301,30 @@ Orderer: &OrdererDefaults
 #   genesis block for channel related parameters.
 #
 ################################################################################
-#Channel: &ChannelDefaults
+Channel: &ChannelDefaults
     # Policies defines the set of policies at this level of the config tree
     # For Channel policies, their canonical path is
     #   /Channel/<PolicyName>
-   # Policies:
-   #     # Who may invoke the 'Deliver' API
-   #     Readers:
-   #         Type: ImplicitMeta
-   #         Rule: "ANY Readers"
+    Policies:
+        # Who may invoke the 'Deliver' API
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
         # Who may invoke the 'Broadcast' API
-   #     Writers:
-   #         Type: ImplicitMeta
-   #         Rule: "ANY Writers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
         # By default, who may modify elements at this config level
-   #     Admins:
-   #         Type: ImplicitMeta
-   #         Rule: "MAJORITY Admins"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
 
 
     # Capabilities describes the channel level capabilities, see the
     # dedicated Capabilities section elsewhere in this file for a full
     # description
-   # Capabilities:
-   #     <<: *ChannelCapabilities
+    Capabilities:
+        <<: *ChannelCapabilities
 
 ################################################################################
 #
@@ -337,14 +337,11 @@ Orderer: &OrdererDefaults
 Profiles:
 
     TwoOrgsOrdererGenesis:
-        Capabilities:
-            <<: *ChannelCapabilities
+        <<: *ChannelDefaults
         Orderer:
             <<: *OrdererDefaults
             Organizations:
                 - *OrdererOrg
-            Capabilities:
-                <<: *OrdererCapabilities
         Consortiums:
             SampleConsortium:
                 Organizations:

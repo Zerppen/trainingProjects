@@ -82,7 +82,7 @@ PeerOrgs:
   # ---------------------------------------------------------------------------
   # Org2: See "Org1" for full specification
   # ---------------------------------------------------------------------------
-  - Name: YH 
+  - Name: YH
     Domain: yh.trace.cn
     EnableNodeOUs: true
     CA:
@@ -96,7 +96,13 @@ PeerOrgs:
 
   - Name: ZFJG
     Domain: zfjg.gov.cn
+    EnableNodeOUs: true
+    CA:
+        Country: US
+        Province: California
+        Locality: San Francisco
     Template:
       Count: 2
     Users:
       Count: 1
+
